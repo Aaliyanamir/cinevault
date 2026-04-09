@@ -167,21 +167,21 @@ footer{padding:48px 40px 32px;border-top:1px solid var(--border);margin-top:40px
       <div class="icon">📧</div>
       <div class="text">
         <strong>Email</strong>
-        <p><?= SITE_EMAIL ?></p>
+        <p>aliyanamir911@gmail.com</p>
       </div>
     </div>
     <div class="info-item">
       <div class="icon">📞</div>
       <div class="text">
         <strong>Phone</strong>
-        <p>+1 (555) 123-4567</p>
+        <p>+92 3198398494</p>
       </div>
     </div>
     <div class="info-item">
       <div class="icon">⏰</div>
       <div class="text">
         <strong>Working Hours</strong>
-        <p>Monday - Friday: 9AM - 6PM</p>
+        <p>24/7</p>
       </div>
     </div>
   </div>
