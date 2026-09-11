@@ -5,13 +5,22 @@ $loggedIn = isLoggedIn();
 $username = $_SESSION['username'] ?? '';
 $db = getDB();
 
-// Get data for homepage
-$featuredMovies = $db->query("SELECT * FROM movies WHERE is_featured = 1 ORDER BY RAND() LIMIT 5")->fetch_all(MYSQLI_ASSOC);
-$trendingMovies = $db->query("SELECT * FROM movies WHERE is_trending = 1 ORDER BY views DESC LIMIT 12")->fetch_all(MYSQLI_ASSOC);
-$latestMovies = $db->query("SELECT * FROM movies ORDER BY created_at DESC LIMIT 12")->fetch_all(MYSQLI_ASSOC);
-$upcomingMovies = $db->query("SELECT * FROM movies WHERE is_upcoming = 1 OR (release_date IS NOT NULL AND release_date > CURDATE()) ORDER BY release_date ASC LIMIT 8")->fetch_all(MYSQLI_ASSOC);
-$topRated = $db->query("SELECT * FROM movies WHERE rating > 0 ORDER BY rating DESC LIMIT 10")->fetch_all(MYSQLI_ASSOC);
-$genres = $db->query("SELECT * FROM genres ORDER BY name LIMIT 12")->fetch_all(MYSQLI_ASSOC);
+$featuredMovies = [];
+$trendingMovies = [];
+$latestMovies = [];
+$upcomingMovies = [];
+$topRated = [];
+$genres = [];
+
+if ($db) {
+    // Get data for homepage
+    $featuredMovies = $db->query("SELECT * FROM movies WHERE is_featured = 1 ORDER BY RAND() LIMIT 5")->fetch_all(MYSQLI_ASSOC);
+    $trendingMovies = $db->query("SELECT * FROM movies WHERE is_trending = 1 ORDER BY views DESC LIMIT 12")->fetch_all(MYSQLI_ASSOC);
+    $latestMovies = $db->query("SELECT * FROM movies ORDER BY created_at DESC LIMIT 12")->fetch_all(MYSQLI_ASSOC);
+    $upcomingMovies = $db->query("SELECT * FROM movies WHERE is_upcoming = 1 OR (release_date IS NOT NULL AND release_date > CURDATE()) ORDER BY release_date ASC LIMIT 8")->fetch_all(MYSQLI_ASSOC);
+    $topRated = $db->query("SELECT * FROM movies WHERE rating > 0 ORDER BY rating DESC LIMIT 10")->fetch_all(MYSQLI_ASSOC);
+    $genres = $db->query("SELECT * FROM genres ORDER BY name LIMIT 12")->fetch_all(MYSQLI_ASSOC);
+}
 
 // Get continue watching for logged in user
 $continueWatching = [];
@@ -21,7 +30,7 @@ if ($loggedIn) {
 
 // Attach genres to movies
 function attachGenresToMovies($db, &$movies) {
-    if (empty($movies)) return;
+    if (!$db || empty($movies)) return;
     $ids = array_column($movies, 'id');
     if (empty($ids)) return;
     $placeholders = implode(',', array_fill(0, count($ids), '?'));
@@ -50,9 +59,11 @@ attachGenresToMovies($db, $continueWatching);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= SITE_NAME ?> - Watch Movies Online Free</title>
-<meta name="description" content="Watch the latest movies online for free. Stream HD quality movies, TV shows, and more. No signup required!">
-<meta name="keywords" content="movies, watch movies, free movies, online streaming, HD movies">
+<title><?= SITE_NAME ?> - Discover Movies & TV Shows</title>
+
+<meta name="description" content="Discover movies and TV shows, explore new releases, popular titles, genres, ratings, and more.">
+
+<meta name="keywords" content="movies, TV shows, films, cinema, movie database, new releases, popular movies">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
